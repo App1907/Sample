@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, SafeAreaView, Modal, Alert, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, SafeAreaView, Modal, Alert, Platform, Dimensions } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import RNPickerSelect from 'react-native-picker-select';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { request, PERMISSIONS, openSettings } from 'react-native-permissions';
 import ImagePicker from 'react-native-image-crop-picker';
+
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 
 const EditProfileScreen = () => {
   const navigation = useNavigation();
@@ -129,12 +134,14 @@ const EditProfileScreen = () => {
 
 
         <View style={styles.profileContainer}>
+        <View style={styles.personConatiner}>
           {/* Display the selected profile image */}
           {profileImage ? (
             <Image style={styles.profileImage} source={profileImage} />
           ) : (
             <Image style={styles.profileImage} source={require('../../assets/images/profile.png')} />
           )}
+          </View>
 
 
           <View style={styles.profileTextContainer}>
@@ -147,28 +154,28 @@ const EditProfileScreen = () => {
 
 
 
-        {/* Rest of the input fields remain the same */}
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Name</Text>
           <TextInput
             style={styles.input}
             value={name}
             onChangeText={setName}
-            placeholder="Enter your name"
+            placeholder="Name"
           />
         </View>
 
 
 
 
-        {/* Other inputs like Username, Birthday, Phone, Email, etc. */}
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Username</Text>
           <TextInput
             style={styles.input}
             value={username}
             onChangeText={setUsername}
-            placeholder="Enter your username"
+            placeholder="Username"
           />
         </View>
 
@@ -232,9 +239,9 @@ const EditProfileScreen = () => {
               style={styles.phoneInput}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
-              placeholder="Enter your phone number"
+              placeholder="Phone Number"
             />
-            <TouchableOpacity>
+            <TouchableOpacity style={styles.changeButton}>
               <Text style={styles.changeText}>Change</Text>
             </TouchableOpacity>
           </View>
@@ -247,9 +254,9 @@ const EditProfileScreen = () => {
               style={styles.inputWithButton}
               value={email}
               onChangeText={setEmail}
-              placeholder="Enter your email"
+              placeholder="Email ID"
             />
-            <TouchableOpacity>
+            <TouchableOpacity style={styles.verifyButton}>
               <Text style={styles.verifyText}>Verify</Text>
             </TouchableOpacity>
           </View>
@@ -268,6 +275,7 @@ const EditProfileScreen = () => {
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <Text style={styles.modalHeader}>Profile Photo</Text>
+              <View style={styles.line}/>
 
               {/* Modal option to select image from gallery */}
               <TouchableOpacity style={styles.modalOption} onPress={openGallery}>
@@ -365,6 +373,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  personConatiner:{
+    backgroundColor:'#E1EBFE',
+    borderRadius: 100,
+    width: 120,
+    height: 120,
+  },
   profileImage: {
     width: 120,
     height: 120,
@@ -377,14 +391,18 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     color: '#7D7D7D',
+    marginLeft: 20,
     marginBottom: 5,
   },
   changePhotoText: {
     color: '#FF00B8',
+    marginLeft: 20,
     fontSize: 14,
     fontWeight: 'bold',
   },
   inputContainer: {
+    //width: 368,
+    //height: 60,
     marginBottom: 20,
   },
   inputLabel: {
@@ -460,6 +478,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     paddingRight: 70, 
   },
+  changeButton:{
+    justifyContent: 'center',
+  },
   changeText: {
     color: '#FF00B8',
     fontWeight: 'bold',
@@ -476,6 +497,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7F7F7',
     paddingRight: 70,
   },
+  verifyButton:{
+    justifyContent: 'center',
+  },
   verifyText: {
     color: '#FF00B8',
     fontWeight: 'bold',
@@ -483,8 +507,8 @@ const styles = StyleSheet.create({
     right: 15,
   },
   updateButton: {
-    backgroundColor: '#0000FF',
-    borderRadius: 8,
+    backgroundColor: '#000080',
+    borderRadius: 16,
     paddingVertical: 15,
     alignItems: 'center',
     marginTop: 20,
@@ -501,16 +525,30 @@ const styles = StyleSheet.create({
     //width: 428,
   },
   modalContent: {
+    //width: '100%',
+    //height: 400,
+    width: windowWidth,
+    height: windowHeight * 0.44151738672,
     backgroundColor: '#fff',
     padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
   modalHeader: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontWeight:'700',
+    fontSize:24,
+    lineHeight:30.36,
+    marginTop: 10,
+    //marginBottom: 20,
   },
+  line:
+    {
+        width:windowWidth*0.88785046729,
+        height:1,
+        backgroundColor:'#E6E9F3',
+        marginTop:windowHeight*0.02107481559,
+        marginBottom:windowHeight*0.02107481559,
+    },
   modalOption: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -519,10 +557,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6F9FA',
     borderBottomWidth: 1,
     borderBottomColor: '#E8E8E8',
+    marginBottom: 15,
   },
   modalIcon: {
     width: 30,
     height: 30,
+    marginLeft: 14,
     marginRight: 20,
   },
   modalOptionText: {
@@ -530,8 +570,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   arrowIcon: {
-    width: 16,
-    height: 16,
+    width: 4,
+    height: 8,
+    marginRight: 18,
   },
 });
 
