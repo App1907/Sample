@@ -57,3 +57,46 @@
       Alert.alert('Error', 'Failed to request permission.');
     }
   };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const openGallery = async () => {
+  try {
+    const permission = 
+      Platform.OS === 'ios'
+        ? await request(PERMISSIONS.IOS.PHOTO_LIBRARY)
+        : await request(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES);
+
+    if (permission === 'granted') {
+      try {
+        const image = await ImagePicker.openPicker({
+          width: 300,
+          height: 300,
+          cropping: true,
+        });
+        setProfileImage({ uri: image.path }); // Set profile image
+        closeExitModal(); // Close modal
+      } catch (error) {
+        Alert.alert('Error', 'Unable to open gallery');
+      }
+    } else {
+      Alert.alert('Permission Denied', 'Please enable gallery access from settings.');
+      if (openSettings) {
+        openSettings();
+      }
+    }
+  } catch (error) {
+    Alert.alert('Error', 'Failed to request permission.');
+  }
+};
